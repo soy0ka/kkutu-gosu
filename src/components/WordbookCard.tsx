@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 interface WordbookCardProps {
@@ -5,6 +7,9 @@ interface WordbookCardProps {
   wordCount: number;
   userCount: number;
   words: string[];
+  onSelect?: (id: string) => void;
+  isSelected?: boolean;
+  id: string;
 }
 
 const WordbookCard: React.FC<WordbookCardProps> = ({
@@ -12,8 +17,23 @@ const WordbookCard: React.FC<WordbookCardProps> = ({
   wordCount,
   userCount,
   words,
-}) => (
-  <li className="text-gray-700 group relative flex cursor-pointer flex-row-reverse items-start">
+  onSelect,
+  isSelected = false,
+  id,
+}) => {
+  const handleClick = () => {
+    onSelect?.(id);
+  };
+
+  return (
+    <li 
+      className={`text-gray-700 group relative flex cursor-pointer flex-row-reverse items-start transition-all duration-200 ${
+        isSelected 
+          ? 'bg-blue-50 border-2 border-blue-300 rounded-lg shadow-md' 
+          : 'hover:bg-gray-50'
+      }`}
+      onClick={handleClick}
+    >
     <div className="relative -left-1 top-2 flex max-h-24 flex-1 flex-col gap-0.5 overflow-hidden bg-gradient-to-r from-white to-transparent py-1.5 pl-4 pr-8">
       <div className="text-sm font-bold ">{title}</div>
       <div className="flex items-center gap-1 text-b4">
@@ -85,7 +105,17 @@ const WordbookCard: React.FC<WordbookCardProps> = ({
         </label>
       </div>
     </div>
+    {isSelected && (
+      <div className="absolute top-2 right-2 z-10">
+        <div className="bg-blue-500 text-white rounded-full p-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check">
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+      </div>
+    )}
   </li>
-);
+  );
+};
 
 export default WordbookCard;

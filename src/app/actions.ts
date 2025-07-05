@@ -25,7 +25,6 @@ export interface WordBook {
 export const getWordbookList = async () => {
   const URL = 'https://kkutu.kr/api/wordbook/search?order=recent'
   const response = await apiClient.get<WordbookResponse>(URL, {})
-  console.log(response)
   if (response.status !== 200) {
     throw new Error('낱말집을 불러오지 못했습니다. 다시 시도해주세요.')
   }

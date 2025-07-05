@@ -22,8 +22,7 @@ export default function RootLayout({
         className={`${suit.variable} antialiased bg-background text-foreground flex flex-col min-h-screen overflow-auto`}
       >
         {children}
-      </body>
-            <footer className="bg-white border-t border-gray-200 mt-auto">
+        <footer className="bg-white border-t border-gray-200 mt-auto">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex flex-col items-center space-y-4">
         <div className="flex items-center space-x-2">
@@ -45,6 +44,7 @@ export default function RootLayout({
           </div>
         </div>
       </footer>
+      </body>
     </html>
   );
 }
