@@ -6,7 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build": "docker build -t kkutu-gosu .",
+    "docker:run": "docker run -p 3000:3000 kkutu-gosu",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker:dev-down": "docker-compose -f docker-compose.dev.yml down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:clean": "docker system prune -a -f && docker volume prune -f"
   },
   "dependencies": {
     "@types/bull": "^4.10.4",

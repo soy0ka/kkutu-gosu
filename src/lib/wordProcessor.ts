@@ -11,19 +11,48 @@ interface WordData {
   displayName?: string;
   part?: string;
   flags?: string;
-  meanings?: Array<{ payload?: string }>;
+  meanings?: Array<{ 
+    seq?: number;
+    categoryId?: number | null;
+    payload?: string;
+  }>;
+  [key: string]: any; // 다른 필드들도 접근 가능하게
 }
 
-// 단어 데이터 처리 함수
-const processWordData = (word: WordData) => {
-  return {
+// 로깅 플래그
+let hasLoggedWordStructure = false;
+
+// 단어 데이터 처리 함수 - 각 의미마다 별도의 행을 생성
+const processWordData = (word: WordData): Array<{[key: string]: string}> => {
+  // 디버깅을 위해 단어 객체의 모든 키 로깅 (첫 번째 단어만)
+  if (!hasLoggedWordStructure) {
+    console.log('Word object keys:', Object.keys(word));
+    console.log('Sample word data:', word);
+    hasLoggedWordStructure = true;
+  }
+
+  const baseData = {
     '표제어': word.name ?? '',
     '입력어': word.displayName ?? '',
     '품사': word.part ?? '',
-    '플래그': word.flags ?? '',
-    '주제': '',
-    '뜻': word.meanings && word.meanings[0] ? word.meanings[0].payload ?? '' : ''
+    '플래그': word.flags?.toString() ?? '',
   };
+
+  // meanings가 없거나 빈 배열인 경우 기본 행 하나 생성
+  if (!word.meanings || word.meanings.length === 0) {
+    return [{
+      ...baseData,
+      '주제': '0',
+      '뜻': ''
+    }];
+  }
+
+  // 각 meaning마다 별도의 행 생성
+  return word.meanings.map(meaning => ({
+    ...baseData,
+    '주제': (meaning.categoryId ?? 0).toString(),
+    '뜻': meaning.payload ?? ''
+  }));
 };
 
 // 페이지별 단어 가져오기
@@ -75,7 +104,7 @@ export const processWordCollection = async (jobId: string, wordBookId: string) =
       const data = await fetchWords(page, wordBookId);
       
       if (data.list) {
-        const pageWords = data.list.map(processWordData);
+        const pageWords = data.list.flatMap(processWordData);
         allWords.push(...pageWords);
       }
 

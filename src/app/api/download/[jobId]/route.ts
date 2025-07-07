@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getJobStatus, getTsvFile } from '~/lib/jobManager';
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { jobId: string } }
+  req: NextRequest,
+  context: { params: { jobId: string } }
 ) {
   try {
-    const { jobId } = await params;
+    const { jobId } = context.params;
     
     const job = await getJobStatus(jobId);
     

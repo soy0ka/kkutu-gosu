@@ -1,0 +1,23 @@
+# 개발용 Dockerfile
+FROM node:20-alpine
+
+# pnpm 설치
+RUN npm install -g pnpm
+
+# 작업 디렉토리 설정
+WORKDIR /app
+
+# 의존성 파일들 먼저 복사 (Docker 캐시 최적화)
+COPY package.json pnpm-lock.yaml ./
+
+# 의존성 설치
+RUN pnpm install
+
+# 소스 코드 복사 (볼륨 마운트 시에는 덮어씌워짐)
+COPY . .
+
+# 포트 설정
+EXPOSE 3000
+
+# 개발 서버 시작
+CMD ["pnpm", "dev"]
