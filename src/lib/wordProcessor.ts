@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { saveTsvFile, updateJobStatus } from './jobManager';
 
 // API 응답 타입 정의

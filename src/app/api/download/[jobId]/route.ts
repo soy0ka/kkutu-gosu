@@ -3,10 +3,10 @@ import { getJobStatus, getTsvFile } from '~/lib/jobManager';
 
 export async function GET(
   req: NextRequest,
-  context: { params: { jobId: string } }
+  context: { params: Promise<{ jobId: string }> }
 ) {
   try {
-    const { jobId } = context.params;
+    const { jobId } = await context.params;
     
     const job = await getJobStatus(jobId);
     

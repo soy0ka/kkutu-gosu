@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // 메모리에서 모든 작업 초기화 (개발용)
 const jobs = new Map();
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     // 메모리 초기화
     jobs.clear();
