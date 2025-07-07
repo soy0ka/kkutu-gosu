@@ -11,9 +11,6 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - redis
     networks:
       - kkutu-network
     restart: unless-stopped
@@ -21,43 +18,7 @@ services:
       # 로그나 임시 파일을 위한 볼륨 (선택사항)
       - app-data:/app/data
 
-  # Redis 서비스 (Bull 큐를 위해)
-  redis:
-    image: redis:7-alpine
-    container_name: kkutu-gosu-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    networks:
-      - kkutu-network
-    restart: unless-stopped
-    command: redis-server --appendonly yes
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 3s
-      retries: 3
-
-  # Redis 모니터링을 위한 Redis Commander (개발용, 선택사항)
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    container_name: kkutu-gosu-redis-commander
-    hostname: redis-commander
-    ports:
-      - "8081:8081"
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    depends_on:
-      - redis
-    networks:
-      - kkutu-network
-    profiles:
-      - dev  # 개발 환경에서만 실행
-
 volumes:
-  redis-data:
-    driver: local
   app-data:
     driver: local
 
